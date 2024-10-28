@@ -1,9 +1,6 @@
 package com.collections;
 
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class PracticeCollections {
     public static void main(String[] args) {
@@ -36,10 +33,11 @@ public class PracticeCollections {
 
 
         //hashmap
-
+        HashMap<Integer,String> map = new HashMap<>();
+        map.put(1,"deepak");
 
         //hash set
-
+        HashSet<Integer> set = new HashSet<>();
 
         //miscellaneous
 
