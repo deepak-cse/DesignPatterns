@@ -70,8 +70,23 @@ public class Question implements Commentable, Votable{
     }
 
     @Override
-    public void addComment(Comment comment) {
+    public void vote(User user, int value) {
+        if (value != 1 && value != -1) {
+            throw new IllegalArgumentException("Vote value must be either 1 or -1");
+        }
+        votes.removeIf(v -> v.getUser().equals(user));
+        votes.add(new Vote(user, value));
+        author.updateReputation(value * 5);  // +5 for upvote, -5 for downvote
+    }
 
+    @Override
+    public int getVoteCount() {
+        return votes.stream().mapToInt(Vote::getValue).sum();
+    }
+
+    @Override
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 
     @Override
@@ -87,13 +102,4 @@ public class Question implements Commentable, Votable{
         return votes;
     }
 
-    @Override
-    public void vote(User user, int value) {
-
-    }
-
-    @Override
-    public int getVoteCount() {
-        return 0;
-    }
 }
