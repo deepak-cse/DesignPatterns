@@ -15,7 +15,7 @@ public class Answer implements Votable,Commentable{
    List<Comment> comments;
    List<Vote> votes;
 
-    public Answer(String content, User author, Question question) {
+    public Answer( User author, Question question, String content) {
         this.id = generatedId();
         this.content = content;
         this.author = author;
@@ -64,7 +64,7 @@ public class Answer implements Votable,Commentable{
 
     @Override
     public void addComment(Comment comment) {
-
+        comments.add(comment);
     }
 
     @Override
@@ -78,11 +78,18 @@ public class Answer implements Votable,Commentable{
 
     @Override
     public void vote(User user, int value) {
+        if(value!=1 && value!=-1){
+            throw new IllegalArgumentException("Value should 1 or -1");
+        }
+
+        votes.removeIf(v->v.getUser().equals(user));
+        votes.add(new Vote(user,value));
+        author.updateReputation(value*10);
 
     }
 
     @Override
     public int getVoteCount() {
-        return 0;
+        return votes.stream().mapToInt(Vote::getValue).sum();
     }
 }

@@ -8,7 +8,7 @@ public class Comment {
     private final User author;
     private final Date creationDate;
 
-    public Comment(String content, User author) {
+    public Comment( User author, String content) {
         this.id = generatedId();
         this.content = content;
         this.author = author;

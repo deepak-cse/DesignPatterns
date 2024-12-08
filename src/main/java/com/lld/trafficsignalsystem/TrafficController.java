@@ -1,0 +1,63 @@
+package com.lld.trafficsignalsystem;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class TrafficController {
+
+    private static TrafficController instance;
+
+    Map<String,Road> roads;
+
+    private TrafficController (){
+      roads = new HashMap<>();
+    }
+
+    public static synchronized TrafficController getInstance() {
+        if(instance==null){
+            instance = new TrafficController();
+        }
+        return instance;
+    }
+
+    public void addRoad(Road road){
+        roads.put(road.getId(),road);
+    }
+
+    public void removeRoad(String roadId) {
+        roads.remove(roadId);
+    }
+
+    public void startTrafficControl(){
+        for ( Road road : roads.values()) {
+
+            TrafficLight trafficLight = road.getTrafficLight();
+
+            new Thread( ()-> {
+                while(true){
+                    try {
+                    Thread.sleep(trafficLight.getRedDuration());
+                    trafficLight.changeSignal(Signal.GREEN);
+                    Thread.sleep(trafficLight.getGreenDuration());
+                    trafficLight.changeSignal(Signal.YELLOW);
+                    Thread.sleep(trafficLight.getYellowDuration());
+                    trafficLight.changeSignal(Signal.RED);}
+                    catch (InterruptedException e){
+                        System.out.println("Thread interrupted exception");
+                    }
+                }
+            }
+
+            ).start();
+
+
+        }
+    }
+
+
+    public void handleEmergency(){
+
+    }
+
+
+}
